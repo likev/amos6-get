@@ -1,0 +1,224 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<meta content="河南六要素数据提取" name="description"/>
+	
+		<title>六要素数据提取</title>
+		
+		    <!-- 新 Bootstrap 核心 CSS 文件 -->
+		<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<style>
+			html, body, .fullheight{
+				height:100%;
+			}
+			body { padding-top: 70px; }
+			
+			@media (max-width: 767px) {
+			body { padding-top: 100px; }
+			}
+			
+			.navbar-nav > li {
+				float: left;
+			}
+			
+			.navbar-form {
+				border: 0 none;
+				box-shadow: none;
+				margin-left: 0;
+				margin-right: 0;
+				padding-bottom: 0;
+				padding-top: 0;
+				width: auto;
+			}
+			.navbar-left {
+				float: left;
+			}
+			
+			#InitialTime {
+				width:100%;
+			}
+			
+			#rhtable{
+				margin-top:20px;
+			}
+			
+			#rain-level-group{
+				display: none;
+			}
+		</style>
+		
+	</head>
+
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		  <div class="container">
+			<form class="navbar-form navbar-left city-group">
+				<select id="citys" class="form-control">
+					<option value="洛阳市">洛阳市</option>
+				</select>
+				<select id="stations" class="form-control">
+					<option value="L4796">刘店</option>
+					<option value="L4804">小店</option>
+					<option value="O2180">洛宁下峪</option>
+					<option value="O2205">小浪底</option>
+					<option value="O2670">西坡村</option>
+					<option value="O2671">丰李</option>
+					<option value="O2672" selected="">李楼</option>
+					<option value="O2673">龙门</option>
+					<option value="O2674">长水</option>
+					<option value="O2675">马东</option>
+					<option value="O2676">西霞院</option>
+					<option value="O2677">横水村</option>
+					<option value="O2678">绮梦</option>
+					<option value="O2679">付店</option>
+					<option value="O2680">靳村</option>
+					<option value="O2681">库区</option>
+					<option value="O2682">田湖</option>
+					<option value="O2683">送庄</option>
+					<option value="O2684">仓头</option>
+					<option value="O2685">磁涧</option>
+					<option value="O2686">石寺</option>
+					<option value="O2687">铁门村</option>
+					<option value="O2688">府店</option>
+					<option value="O2689">南家村</option>
+					<option value="O2690">东蔡庄</option>
+					<option value="O2691">牛心山</option>
+					<option value="O2692">夏堡</option>
+					<option value="O2693">高山</option>
+					<option value="O2694">酒后</option>
+					<option value="O2695">吕店</option>
+					<option value="O2696">白杨</option>
+					<option value="O2697">樊村</option>
+					<option value="O2698">莲庄</option>
+					<option value="O2699">盐镇</option>
+					<option value="O4485">洛宁底张</option>
+					<option value="O4631">城关</option>
+					<option value="O9008">G30-X-K700孟津</option>
+					<option value="O9009">G30-X-K730新安</option>
+				</select>
+			</form>
+			
+		  </div>
+		</nav>
+		
+		<div class="container">
+		<!-- Tab panes -->
+			<div class='row'>
+				<form class="form-inline">
+ 
+				 <div class="form-group col-md-6 col-xs-12">
+					<button class="btn btn-default backward col-xs-3 col-md-3" type="button"><span class="glyphicon glyphicon-chevron-left"></span>前一时次</button>
+					<div class="form-group col-xs-6  col-md-5"><input type="text" id="InitialTime" class="form-control" value="2014-09-02" readonly></div>
+					<button class="btn btn-default forward col-xs-3 col-md-3" type="button">后一时次<span class="glyphicon glyphicon-chevron-right"></span></button>
+				</div>
+				
+				<div class="form-group col-md-6 col-xs-12">
+					<button class="btn btn-primary col-xs-3 col-md-3" type="button" id="updata">请求</button>
+				</div>
+				
+				</form>
+			</div>
+			
+			
+		</div>
+		
+		<div class="container">
+			<div class="row">
+			   <div class='col-md-12'>
+					<table id='rhtable' class='table table-bordered table-hover'>
+					<thead>
+							<tr><th>时间</th><th>气温(℃)</th><th>风速(m/s)</th><th>风向</th><th>相对湿度(%)</th><th>本站气压(hPa)</th><th>小时降水(mm)</th></tr>
+					</thead>
+					<tbody></tbody>
+					</table>
+			   </div>
+			</div>
+		</div>
+	
+		<script src="http://cdn.staticfile.org/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/moment.js/2.13.0/moment.min.js"></script>
+		<script src="http://cdn.staticfile.org/highcharts/4.0.1/highcharts.js"></script>
+		
+		<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+		<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+		<script>
+		
+		</script>
+		<script>
+		
+		
+	
+		$(document).ready(function() {
+			var app = {};
+		
+			app.rhdata = [];
+			app.update = function(){
+				var rhstr = '';
+				$.each(app.rhdata, function( index, item ) {
+					rhstr += '<tr><td>'+item.time+'</td><td>'+item.T+'</td><td>'+item.windVal+'</td><td>'+item.windDir+'</td><td>'+item.rh+'</td><td>'+item.localP+'</td><td>'+item.rain+'</td></tr>';
+				});
+				
+				$('#rhtable>tbody').html(rhstr);
+			}
+		
+			var timedata = moment().subtract(1, 'days');
+			
+			//InitialTime
+			var setInitialTime = function(){
+				$('#InitialTime').val(timedata.format('YYYY-MM-DD'));
+			}
+			setInitialTime();
+			
+			var updateData = function(){
+				var daystr = timedata.format('YYYYMMDD');
+				$.post( "/post", 
+					{startdate: daystr+'000000', endate:daystr+'230000',  countyno:$('#stations').val()  }, 
+					function( data ) {
+					  app.rhdata = data;
+					  app.update();
+					}, 
+					"json")
+					.always(function(){
+						$('#updata').removeAttr('disabled');
+					});
+			}
+			
+			$('#updata').click(function(){
+				$(this).attr('disabled', 'disabled');
+				$('#rhtable>tbody').html('');
+				updateData();	
+			});
+			
+			$('.forward, .backward').click(function(){
+				if( $(this).hasClass('backward') ){
+					timedata.subtract(1, 'days');
+				}else{
+					timedata.add(1, 'days');
+				}
+				
+				setInitialTime();
+				//updateData();
+			})
+			
+			$('#updata').click();//initial request
+		});
+		
+		</script>
+	</body>
+</html>
